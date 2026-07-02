@@ -1,45 +1,79 @@
-const Task = require("../models/Task");
 const Project = require("../models/Project");
+const Task = require("../models/Task");
 
-const getDashboard = async (req, res) => {
-    try {
-        const isAdmin = req.user.role === "admin";
-        const userId = req.user.userId;
+const getDashboardStats = async (req, res) => {
+    try{
+        const [
+    totalProjects,
+    totalTasks,
+    todoTasks,
+    inProgressTasks,
+    qaTasks,
+    doneTasks,
+    lowPriority,
+    mediumPriority,
+    highPriority,
+    criticalPriority,
+] = await Promise.all([
 
-        // Build scope filters for non-admins
-        const taskFilter = isAdmin ? {} : {
-            $or: [
-                { createdBy: userId },
-                { assignedTo: userId },
-            ],
-        };
-        const projectFilter = isAdmin ? {} : { createdBy: userId };
+    Project.countDocuments(),
 
-        // Totals
-        const totalProjects = await Project.countDocuments(projectFilter);
-        const totalTasks = await Task.countDocuments(taskFilter);
+    Task.countDocuments(),
 
-        // Status breakdown
-        const todo = await Task.countDocuments({ ...taskFilter, status: "Todo" });
-        const inProgress = await Task.countDocuments({ ...taskFilter, status: "In Progress" });
-        const qa = await Task.countDocuments({ ...taskFilter, status: "QA" });
-        const done = await Task.countDocuments({ ...taskFilter, status: "Done" });
+    Task.countDocuments({
+        status: "Todo",
+    }),
 
-        // Priority breakdown
-        const high = await Task.countDocuments({ ...taskFilter, priority: "High" });
-        const critical = await Task.countDocuments({ ...taskFilter, priority: "Critical" });
+    Task.countDocuments({
+        status: "In Progress",
+    }),
+
+    Task.countDocuments({
+        status: "QA",
+    }),
+
+    Task.countDocuments({
+        status: "Done",
+    }),
+
+    Task.countDocuments({
+        priority: "Low",
+    }),
+
+    Task.countDocuments({
+        priority: "Medium",
+    }),
+
+    Task.countDocuments({
+        priority: "High",
+    }),
+
+    Task.countDocuments({
+        priority: "Critical",
+    }),
+
+]);
 
         res.status(200).json({
             totalProjects,
             totalTasks,
-            status: { todo, inProgress, qa, done },
-            priority: { high, critical },
+            todoTasks,
+            inProgressTasks,
+            qaTasks,
+            doneTasks,
+            lowPriority,
+            mediumPriority,
+            highPriority,
+            criticalPriority
         });
-    } catch (error) {
+    }
+    catch(error){
         res.status(500).json({
             error: error.message,
         });
     }
-};
+}
 
-module.exports = { getDashboard };
+module.exports = {
+    getDashboardStats,
+};

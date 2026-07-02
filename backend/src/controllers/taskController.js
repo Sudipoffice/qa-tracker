@@ -46,86 +46,66 @@ const createTask = async (req, res) => {
 }
 
 const getTasks = async (req, res) => {
-    try {
+    try{
         const filter = {};
 
-        // Non-admins only see tasks they created or are assigned to
-        if (req.user.role !== "admin") {
-            filter.$or = [
-                { createdBy: req.user.userId },
-                { assignedTo: req.user.userId },
-            ];
+        if(req.query.status){
+            filter.status = req.query.status;
         }
+        if (req.query.priority) {
+            filter.priority = req.query.priority;
+        }
+        if(req.query.search){
+            filter.title = {
+                $regex: req.query.search,
+                $options: "i"
+            }
+        }
+        let query = Task.find(filter).populate("project", "name status").populate("assignedTo", "name email role").populate("createdBy", "name email");
 
-        if (req.query.project) filter.project = req.query.project;
-        if (req.query.status) filter.status = req.query.status;
-        if (req.query.priority) filter.priority = req.query.priority;
-
-        let query = Task.find(filter);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
 
         if (req.query.sort) {
             query = query.sort(req.query.sort);
-        } else {
-            query = query.sort("-createdAt");
-        }
+            }
+        else {
+                query = query.sort("-createdAt");
+            }
 
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
+        const total = await Task.countDocuments(filter);
+        const tasks = await query.skip(skip).limit(limit);
 
-        query = query.skip(skip).limit(limit);
-
-        const tasks = await query
-            .populate("project", "name status")
-            .populate("assignedTo", "name email role")
-            .populate("createdBy", "name email");
-
-        res.status(200).json({ tasks, page, limit });
-    } catch (error) {
+        res.status(200).json({
+            tasks,
+            pagination: {
+                page,
+                limit,
+                total,
+                pages: Math.ceil(total / limit),
+            },
+        });
+    }
+    catch(error){
         res.status(500).json({
             error: error.message,
-        });
+        })
     }
 }
 
 const getTaskByProject = async (req, res) => {
-    try {
-        const filter = { project: req.params.projectId };
+    try{
+        const tasks = await Task.find({
+            project: req.params.projectId,
+        }).populate("assignedTo", "name email").populate("createdBy", "name email");
 
-        // Non-admins only see tasks they created or are assigned to
-        if (req.user.role !== "admin") {
-            filter.$or = [
-                { createdBy: req.user.userId },
-                { assignedTo: req.user.userId },
-            ];
-        }
-
-        if (req.query.status) filter.status = req.query.status;
-        if (req.query.priority) filter.priority = req.query.priority;
-
-        let query = Task.find(filter);
-
-        if (req.query.sort) {
-            query = query.sort(req.query.sort);
-        } else {
-            query = query.sort("-createdAt");
-        }
-
-        const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
-
-        query = query.skip(skip).limit(limit);
-
-        const tasks = await query
-            .populate("assignedTo", "name email")
-            .populate("createdBy", "name email");
-
-        res.status(200).json({ tasks, page, limit });
-    } catch (error) {
+        res.status(200).json(tasks);
+    }
+    catch(error){
         res.status(500).json({
             error: error.message,
-        });
+        })
     }
 }
 
