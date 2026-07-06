@@ -1,16 +1,18 @@
-import { useContext } from 'react'
-import { Navigate } from 'react-router-dom'
-import { AuthContext } from '../context/AuthContext'
-import Loader from '../components/ui/Loader'
+import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
-  const { token, loading } = useContext(AuthContext)
+export default function ProtectedRoute({
+    children,
+}) {
 
-  if (loading) return <Loader fullPage />
+    const token =
+        localStorage.getItem("token");
 
-  if (!token) return <Navigate to="/login" replace />
+    if (!token) {
+        return (
+            <Navigate to="/login" />
+        );
+    }
 
-  return children
+    return children;
+
 }
-
-export default ProtectedRoute

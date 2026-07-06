@@ -9,6 +9,7 @@ const gradients = {
   sky: 'from-sky-500/10 to-sky-500/5 text-sky-600',
   slate: 'from-slate-500/10 to-slate-500/5 text-slate-600',
   amber: 'from-amber-500/10 to-amber-500/5 text-amber-600',
+  yellow: 'from-amber-500/10 to-amber-500/5 text-amber-600',
 }
 
 export default function StatCard({ icon: Icon, label, value, color = 'indigo' }) {

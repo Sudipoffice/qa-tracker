@@ -14,6 +14,7 @@ const getDashboardStats = async (req, res) => {
     mediumPriority,
     highPriority,
     criticalPriority,
+    recentTasks,
 ] = await Promise.all([
 
     Project.countDocuments(),
@@ -52,6 +53,11 @@ const getDashboardStats = async (req, res) => {
         priority: "Critical",
     }),
 
+    Task.find()
+        .sort("-createdAt")
+        .limit(5)
+        .populate("project", "name")
+        .populate("assignedTo", "name email"),
 ]);
 
         res.status(200).json({
@@ -64,7 +70,8 @@ const getDashboardStats = async (req, res) => {
             lowPriority,
             mediumPriority,
             highPriority,
-            criticalPriority
+            criticalPriority,
+            recentTasks,
         });
     }
     catch(error){
