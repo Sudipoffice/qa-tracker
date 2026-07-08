@@ -36,6 +36,11 @@ export default function Profile() {
     return (
       <MainLayout>
         <div className="max-w-3xl mx-auto space-y-5">
+          <div className="flex items-center gap-2 text-xs text-gray-400 font-medium mb-1">
+            <span>Profile</span>
+            <span className="text-gray-300">/</span>
+            <span className="text-gray-600">Account</span>
+          </div>
           <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
             <div className="w-20 h-20 rounded-full skeleton mx-auto mb-4" />
             <div className="skeleton" style={{ width: '40%', height: '20px', margin: '0 auto 8px' }} />
@@ -63,6 +68,11 @@ export default function Profile() {
   return (
     <MainLayout>
       <div className="max-w-3xl mx-auto space-y-5">
+        <div className="flex items-center gap-2 text-xs text-gray-400 font-medium mb-1">
+          <span>Profile</span>
+          <span className="text-gray-300">/</span>
+          <span className="text-gray-600">Account</span>
+        </div>
         <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 animate-fade-in">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             <Avatar name={data?.name} size="xl" />

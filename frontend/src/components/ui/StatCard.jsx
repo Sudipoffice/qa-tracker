@@ -23,7 +23,7 @@ export default function StatCard({ icon: Icon, label, value, color = 'indigo' })
         )}
         <div className="min-w-0">
           <p className="text-xs text-gray-500 font-medium truncate">{label}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-0.5 tabular-nums truncate">{value}</p>
+          <p className="text-3xl font-bold text-gray-900 mt-0.5 tabular-nums truncate leading-tight">{value}</p>
         </div>
       </div>
     </div>
