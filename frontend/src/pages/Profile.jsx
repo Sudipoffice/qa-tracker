@@ -5,9 +5,9 @@ import { FiUser, FiMail, FiCalendar, FiShield } from 'react-icons/fi'
 import api from '../api/axios'
 
 const roleStyles = {
-  admin: 'bg-indigo-100 text-indigo-700',
-  tester: 'bg-purple-100 text-purple-700',
-  developer: 'bg-slate-100 text-slate-700',
+  admin: 'bg-[#6C5CE7]/10 text-[#6C5CE7]',
+  tester: 'bg-purple-50 text-[#8B5CF6]',
+  developer: 'bg-blue-50 text-[#3B82F6]',
 }
 
 export default function Profile() {
@@ -36,23 +36,22 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <MainLayout title="Profile">
-        <div className="max-w-2xl mx-auto space-y-6">
-          <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-8 text-center animate-pulse">
-            <div className="w-24 h-24 rounded-full bg-gray-200 mx-auto mb-4" />
-            <div className="h-7 bg-gray-200 rounded-lg w-48 mx-auto mb-2" />
-            <div className="h-5 bg-gray-200 rounded-lg w-56 mx-auto mb-3" />
-            <div className="h-6 bg-gray-200 rounded-full w-20 mx-auto" />
+      <MainLayout>
+        <div className="max-w-lg mx-auto space-y-5">
+          <div className="bg-white rounded-xl border border-[#EDEDF0] p-6 text-center">
+            <div className="w-20 h-20 rounded-full skeleton mx-auto mb-4" />
+            <div className="skeleton" style={{ width: '50%', height: '20px', margin: '0 auto 8px' }} />
+            <div className="skeleton" style={{ width: '60%', height: '14px', margin: '0 auto' }} />
           </div>
-          <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-6 animate-pulse">
-            <div className="h-6 bg-gray-200 rounded-lg w-44 mb-6" />
-            <div className="space-y-5">
+          <div className="bg-white rounded-xl border border-[#EDEDF0] p-5">
+            <div className="skeleton" style={{ width: '40%', height: '18px', marginBottom: '16px' }} />
+            <div className="space-y-4">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-gray-200 flex-shrink-0" />
-                  <div className="flex-1">
-                    <div className="h-3 bg-gray-200 rounded w-16 mb-1.5" />
-                    <div className="h-4 bg-gray-200 rounded w-36" />
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-lg skeleton" />
+                  <div className="flex-1 space-y-1">
+                    <div className="skeleton" style={{ width: '30%', height: '10px' }} />
+                    <div className="skeleton" style={{ width: '50%', height: '14px' }} />
                   </div>
                 </div>
               ))}
@@ -64,15 +63,16 @@ export default function Profile() {
   }
 
   return (
-    <MainLayout title="Profile">
-      <div className="max-w-2xl mx-auto space-y-6">
-        <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-8 text-center">
-          <div className="w-24 h-24 rounded-full bg-indigo-100 text-indigo-600 text-3xl font-bold flex items-center justify-center mx-auto mb-4">
+    <MainLayout>
+      <div className="max-w-lg mx-auto space-y-5">
+        {/* Profile Card */}
+        <div className="bg-white rounded-xl border border-[#EDEDF0] p-6 text-center">
+          <div className="w-20 h-20 rounded-full bg-[#6C5CE7]/10 text-[#6C5CE7] text-2xl font-bold flex items-center justify-center mx-auto mb-4 ring-2 ring-white shadow-sm">
             {initials}
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">{data?.name ?? 'Unknown'}</h1>
-          <p className="text-gray-500 mt-0.5">{data?.email ?? ''}</p>
-          <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mt-3 capitalize ${roleStyles[data?.role] ?? 'bg-gray-100 text-gray-700'}`}>
+          <h1 className="text-lg font-bold text-gray-900">{data?.name ?? 'Unknown'}</h1>
+          <p className="text-sm text-gray-500 mt-0.5">{data?.email ?? ''}</p>
+          <span className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-sm font-medium mt-3 capitalize ${roleStyles[data?.role] ?? 'bg-gray-100 text-gray-700'}`}>
             {data?.role ?? 'user'}
           </span>
           {data?.createdAt && (
@@ -83,42 +83,43 @@ export default function Profile() {
           )}
         </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-5">Account Information</h2>
-          <div className="space-y-4">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiUser className="w-5 h-5 text-gray-500" />
+        {/* Account Info */}
+        <div className="bg-white rounded-xl border border-[#EDEDF0] p-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-4">Account Information</h2>
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                <FiUser className="w-4 h-4 text-gray-500" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Name</p>
-                <p className="text-sm font-medium text-gray-900">{data?.name ?? '-'}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiMail className="w-5 h-5 text-gray-500" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Email</p>
-                <p className="text-sm font-medium text-gray-900">{data?.email ?? '-'}</p>
+              <div className="min-w-0">
+                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Name</p>
+                <p className="text-sm font-medium text-gray-900 truncate">{data?.name ?? '-'}</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiShield className="w-5 h-5 text-gray-500" />
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                <FiMail className="w-4 h-4 text-gray-500" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Role</p>
+              <div className="min-w-0">
+                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Email</p>
+                <p className="text-sm font-medium text-gray-900 truncate">{data?.email ?? '-'}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                <FiShield className="w-4 h-4 text-gray-500" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Role</p>
                 <p className="text-sm font-medium text-gray-900 capitalize">{data?.role ?? '-'}</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiCalendar className="w-5 h-5 text-gray-500" />
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                <FiCalendar className="w-4 h-4 text-gray-500" />
               </div>
-              <div>
-                <p className="text-xs text-gray-500">Member Since</p>
+              <div className="min-w-0">
+                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Member Since</p>
                 <p className="text-sm font-medium text-gray-900">
                   {data?.createdAt ? new Date(data.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}
                 </p>

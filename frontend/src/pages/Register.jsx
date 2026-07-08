@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { FiClipboard, FiUser, FiMail } from 'react-icons/fi'
+import { FiClipboard } from 'react-icons/fi'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
 import { register } from '../services/authService'
@@ -98,16 +98,16 @@ export default function Register() {
 
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-xl shadow-indigo-200/40 p-8 sm:p-10">
+          <div className="bg-white rounded-xl shadow-xl shadow-indigo-200/40 p-8 sm:p-10">
             <div className="text-center mb-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#6C5CE7] to-[#5A4BD1] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#6C5CE7]/30">
                 <FiClipboard className="w-7 h-7 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
-              <p className="text-gray-500 mt-1.5">Join QA Tracker today</p>
+              <h1 className="text-xl font-bold text-gray-900">Create Account</h1>
+              <p className="text-sm text-gray-500 mt-1">Join QA Tracker today</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 label="Name"
                 type="text"
@@ -116,7 +116,6 @@ export default function Register() {
                 value={form.name}
                 onChange={handleChange}
                 error={errors.name}
-                icon={FiUser}
               />
 
               <Input
@@ -127,7 +126,6 @@ export default function Register() {
                 value={form.email}
                 onChange={handleChange}
                 error={errors.email}
-                icon={FiMail}
               />
 
               <Input
@@ -157,7 +155,7 @@ export default function Register() {
 
             <p className="text-center text-sm text-gray-500 mt-8">
               Already have an account?{' '}
-              <Link to="/login" className="text-indigo-600 font-semibold hover:text-indigo-500 transition-colors">
+              <Link to="/login" className="text-[#6C5CE7] font-semibold hover:text-[#5A4BD1] transition-colors">
                 Login
               </Link>
             </p>

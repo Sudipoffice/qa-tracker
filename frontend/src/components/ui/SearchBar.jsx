@@ -2,16 +2,14 @@ import { FiSearch, FiX } from 'react-icons/fi'
 
 export default function SearchBar({ value, onChange, placeholder = 'Search...' }) {
   return (
-    <div className="relative w-full max-w-md">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <FiSearch className="w-4 h-4 text-gray-400" />
-      </div>
+    <div className="relative w-full">
+      <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full pl-10 pr-9 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all duration-200 text-sm placeholder:text-gray-400"
+        className="w-full pl-9 pr-8 py-2 bg-white border border-[#EDEDF0] rounded-lg text-sm outline-none transition-all duration-150 focus:ring-2 focus:ring-[#6C5CE7]/20 focus:border-[#6C5CE7] placeholder:text-gray-400"
       />
       {value && (
         <button

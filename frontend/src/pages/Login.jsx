@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { FiClipboard, FiMail } from 'react-icons/fi'
+import { FiClipboard } from 'react-icons/fi'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
 import { login as loginAPI } from '../services/authService'
@@ -99,16 +99,16 @@ export default function Login() {
 
       <div className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-gradient-to-br from-indigo-50 via-white to-indigo-50">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-2xl shadow-xl shadow-indigo-200/40 p-8 sm:p-10">
+          <div className="bg-white rounded-xl shadow-xl shadow-indigo-200/40 p-8 sm:p-10">
             <div className="text-center mb-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+              <div className="w-14 h-14 bg-gradient-to-br from-[#6C5CE7] to-[#5A4BD1] rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#6C5CE7]/30">
                 <FiClipboard className="w-7 h-7 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900">QA Tracker</h1>
-              <p className="text-gray-500 mt-1.5">Sign in to your account</p>
+              <h1 className="text-xl font-bold text-gray-900">QA Tracker</h1>
+              <p className="text-sm text-gray-500 mt-1">Sign in to your account</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 label="Email"
                 type="email"
@@ -117,7 +117,6 @@ export default function Login() {
                 value={form.email}
                 onChange={handleChange}
                 error={errors.email}
-                icon={FiMail}
               />
 
               <Input
@@ -139,7 +138,7 @@ export default function Login() {
                       onChange={(e) => setRemember(e.target.checked)}
                       className="peer sr-only"
                     />
-                    <div className="w-4 h-4 border-2 border-gray-300 rounded peer-checked:border-indigo-600 peer-checked:bg-indigo-600 transition-all duration-200 group-hover:border-indigo-400">
+                    <div className="w-4 h-4 border-2 border-gray-300 rounded peer-checked:border-[#6C5CE7] peer-checked:bg-[#6C5CE7] transition-all duration-200 group-hover:border-[#6C5CE7]/40">
                       <svg className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100 transition-opacity absolute top-0.5 left-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
@@ -156,7 +155,7 @@ export default function Login() {
 
             <p className="text-center text-sm text-gray-500 mt-8">
               Don&apos;t have an account?{' '}
-              <Link to="/register" className="text-indigo-600 font-semibold hover:text-indigo-500 transition-colors">
+              <Link to="/register" className="text-[#6C5CE7] font-semibold hover:text-[#5A4BD1] transition-colors">
                 Register
               </Link>
             </p>

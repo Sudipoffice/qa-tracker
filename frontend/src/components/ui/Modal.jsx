@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { HiX } from 'react-icons/hi'
+import { FiX } from 'react-icons/fi'
 
 const sizes = {
-  sm: 'sm:max-w-md',
+  sm: 'sm:max-w-sm',
   md: 'sm:max-w-lg',
   lg: 'sm:max-w-2xl',
+  xl: 'sm:max-w-4xl',
 }
 
 export default function Modal({ isOpen, onClose, title, children, size = 'md' }) {
@@ -22,15 +23,15 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className={`relative bg-white rounded-2xl shadow-2xl p-6 w-full ${sizes[size]} scale-in`}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+      <div className={`relative bg-white rounded-xl shadow-2xl p-6 w-full ${sizes[size]} animate-scale-in`}>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-base font-semibold text-gray-900">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100 p-1"
+            className="text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100 p-1.5 -mr-1.5"
           >
-            <HiX className="w-5 h-5" />
+            <FiX className="w-4 h-4" />
           </button>
         </div>
         {children}

@@ -4,7 +4,6 @@ export default function Select({
   value,
   onChange,
   error,
-  placeholder = 'Select...',
   className = '',
 }) {
   return (
@@ -17,11 +16,12 @@ export default function Select({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full px-3 py-2.5 rounded-lg border outline-none transition-all duration-200 bg-white text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${error ? 'border-red-300' : 'border-gray-300'} ${!value && placeholder ? 'text-gray-400' : ''} ${className}`}
+        className={`w-full px-3 py-2 rounded-lg border text-sm outline-none transition-all duration-150 bg-white text-gray-900 ${
+          error
+            ? 'border-red-300 focus:ring-2 focus:ring-red-500/20 focus:border-red-400'
+            : 'border-[#EDEDF0] focus:ring-2 focus:ring-[#6C5CE7]/20 focus:border-[#6C5CE7]'
+        } ${className}`}
       >
-        {placeholder && (
-          <option value="" disabled>{placeholder}</option>
-        )}
         {options.map((opt) => (
           <option key={opt.value} value={opt.value}>
             {opt.label}

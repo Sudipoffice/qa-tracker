@@ -1,5 +1,5 @@
-import Modal from './Modal';
-import Button from './Button';
+import Modal from './Modal'
+import Button from './Button'
 
 export default function ConfirmDialog({
   isOpen,
@@ -7,14 +7,14 @@ export default function ConfirmDialog({
   onConfirm,
   title = 'Confirm',
   message = 'Are you sure?',
-  confirmText = 'Confirm',
+  confirmText = 'Delete',
   cancelText = 'Cancel',
   loading = false,
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
       <p className="text-sm text-gray-600 mb-6">{message}</p>
-      <div className="flex justify-end gap-3">
+      <div className="flex justify-end gap-2.5">
         <Button variant="outline" onClick={onClose} disabled={loading}>
           {cancelText}
         </Button>
@@ -23,5 +23,5 @@ export default function ConfirmDialog({
         </Button>
       </div>
     </Modal>
-  );
+  )
 }
