@@ -1,12 +1,12 @@
 const avatarColors = [
-  'bg-[#6C5CE7]',
-  'bg-[#F97316]',
-  'bg-[#22C55E]',
-  'bg-[#3B82F6]',
-  'bg-[#EC4899]',
-  'bg-[#14B8A6]',
-  'bg-[#8B5CF6]',
-  'bg-[#F59E0B]',
+  'bg-indigo-500',
+  'bg-orange-500',
+  'bg-emerald-500',
+  'bg-blue-500',
+  'bg-pink-500',
+  'bg-teal-500',
+  'bg-violet-500',
+  'bg-amber-500',
 ]
 
 function hashCode(name) {
@@ -30,6 +30,7 @@ const sizes = {
   sm: 'w-6 h-6 text-[10px]',
   md: 'w-8 h-8 text-xs',
   lg: 'w-10 h-10 text-sm',
+  xl: 'w-20 h-20 text-2xl',
 }
 
 export default function Avatar({ name = '', imageUrl, size = 'md' }) {
@@ -38,17 +39,15 @@ export default function Avatar({ name = '', imageUrl, size = 'md' }) {
       <img
         src={imageUrl}
         alt={name}
-        className={`${sizes[size]} rounded-full object-cover ring-2 ring-white`}
+        className={`${sizes[size]} rounded-full object-cover ring-2 ring-white shrink-0`}
       />
     )
   }
-
   const colorIndex = hashCode(name) % avatarColors.length
   const initials = getInitials(name)
-
   return (
     <div
-      className={`${sizes[size]} ${avatarColors[colorIndex]} rounded-full flex items-center justify-center text-white font-semibold ring-2 ring-white`}
+      className={`${sizes[size]} ${avatarColors[colorIndex]} rounded-full flex items-center justify-center text-white font-semibold ring-2 ring-white shrink-0`}
       title={name}
     >
       {initials}

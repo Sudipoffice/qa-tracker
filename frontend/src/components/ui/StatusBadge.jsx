@@ -1,8 +1,8 @@
 const statusStyles = {
-  'Todo': 'bg-orange-50 text-[#F97316]',
-  'In Progress': 'bg-yellow-50 text-[#B45309]',
-  'QA': 'bg-purple-50 text-[#6C5CE7]',
-  'Done': 'bg-emerald-50 text-[#22C55E]',
+  'Todo': 'bg-slate-100 text-slate-700',
+  'In Progress': 'bg-blue-100 text-blue-700',
+  'QA': 'bg-violet-100 text-violet-700',
+  'Done': 'bg-emerald-100 text-emerald-700',
 }
 
 export default function StatusBadge({ status }) {

@@ -1,8 +1,8 @@
 const priorityStyles = {
   'Low': 'bg-gray-100 text-gray-600',
-  'Medium': 'bg-amber-50 text-[#D97706]',
-  'High': 'bg-orange-50 text-[#EA580C]',
-  'Critical': 'bg-red-50 text-[#DC2626]',
+  'Medium': 'bg-amber-100 text-amber-700',
+  'High': 'bg-orange-100 text-orange-700',
+  'Critical': 'bg-red-100 text-red-700',
 }
 
 export default function PriorityBadge({ priority }) {

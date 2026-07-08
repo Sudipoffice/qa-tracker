@@ -1,13 +1,14 @@
 import { useContext, useEffect, useState } from 'react'
 import MainLayout from '../layouts/MainLayout'
 import { AuthContext } from '../context/AuthContext'
-import { FiUser, FiMail, FiCalendar, FiShield } from 'react-icons/fi'
+import Avatar from '../components/ui/Avatar'
 import api from '../api/axios'
+import { FiMail, FiCalendar, FiShield, FiUser, FiCheckCircle, FiLayers } from 'react-icons/fi'
 
 const roleStyles = {
-  admin: 'bg-[#6C5CE7]/10 text-[#6C5CE7]',
-  tester: 'bg-purple-50 text-[#8B5CF6]',
-  developer: 'bg-blue-50 text-[#3B82F6]',
+  admin: 'bg-indigo-100 text-indigo-700',
+  tester: 'bg-violet-100 text-violet-700',
+  developer: 'bg-blue-100 text-blue-700',
 }
 
 export default function Profile() {
@@ -19,7 +20,7 @@ export default function Profile() {
     const fetchProfile = async () => {
       try {
         const res = await api.get('/auth/profile')
-        setProfile(res.data)
+        setProfile(res.data.user)
       } catch {
         setProfile(user)
       } finally {
@@ -30,28 +31,25 @@ export default function Profile() {
   }, [user])
 
   const data = profile ?? user
-  const initials = data?.name
-    ? data.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
-    : '?'
 
   if (loading) {
     return (
       <MainLayout>
-        <div className="max-w-lg mx-auto space-y-5">
-          <div className="bg-white rounded-xl border border-[#EDEDF0] p-6 text-center">
+        <div className="max-w-3xl mx-auto space-y-5">
+          <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
             <div className="w-20 h-20 rounded-full skeleton mx-auto mb-4" />
-            <div className="skeleton" style={{ width: '50%', height: '20px', margin: '0 auto 8px' }} />
-            <div className="skeleton" style={{ width: '60%', height: '14px', margin: '0 auto' }} />
+            <div className="skeleton" style={{ width: '40%', height: '20px', margin: '0 auto 8px' }} />
+            <div className="skeleton" style={{ width: '30%', height: '14px', margin: '0 auto' }} />
           </div>
-          <div className="bg-white rounded-xl border border-[#EDEDF0] p-5">
-            <div className="skeleton" style={{ width: '40%', height: '18px', marginBottom: '16px' }} />
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <div className="skeleton" style={{ width: '30%', height: '18px', marginBottom: '16px' }} />
             <div className="space-y-4">
               {[...Array(4)].map((_, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg skeleton" />
                   <div className="flex-1 space-y-1">
-                    <div className="skeleton" style={{ width: '30%', height: '10px' }} />
-                    <div className="skeleton" style={{ width: '50%', height: '14px' }} />
+                    <div className="skeleton" style={{ width: '20%', height: '10px' }} />
+                    <div className="skeleton" style={{ width: '40%', height: '14px' }} />
                   </div>
                 </div>
               ))}
@@ -64,65 +62,99 @@ export default function Profile() {
 
   return (
     <MainLayout>
-      <div className="max-w-lg mx-auto space-y-5">
-        {/* Profile Card */}
-        <div className="bg-white rounded-xl border border-[#EDEDF0] p-6 text-center">
-          <div className="w-20 h-20 rounded-full bg-[#6C5CE7]/10 text-[#6C5CE7] text-2xl font-bold flex items-center justify-center mx-auto mb-4 ring-2 ring-white shadow-sm">
-            {initials}
+      <div className="max-w-3xl mx-auto space-y-5">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 sm:p-8 animate-fade-in">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <Avatar name={data?.name} size="xl" />
+            <div className="text-center sm:text-left flex-1">
+              <h1 className="text-xl font-bold text-gray-900">{data?.name ?? 'Unknown'}</h1>
+              <p className="text-sm text-gray-500 mt-0.5">{data?.email ?? ''}</p>
+              <div className="flex items-center justify-center sm:justify-start gap-3 mt-3">
+                <span className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-sm font-medium capitalize ${roleStyles[data?.role] ?? 'bg-gray-100 text-gray-700'}`}>
+                  {data?.role ?? 'user'}
+                </span>
+                {data?.createdAt && (
+                  <span className="text-xs text-gray-400 flex items-center gap-1">
+                    <FiCalendar className="w-3.5 h-3.5" />
+                    Member since {new Date(data.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
-          <h1 className="text-lg font-bold text-gray-900">{data?.name ?? 'Unknown'}</h1>
-          <p className="text-sm text-gray-500 mt-0.5">{data?.email ?? ''}</p>
-          <span className={`inline-flex items-center rounded-md px-2.5 py-0.5 text-sm font-medium mt-3 capitalize ${roleStyles[data?.role] ?? 'bg-gray-100 text-gray-700'}`}>
-            {data?.role ?? 'user'}
-          </span>
-          {data?.createdAt && (
-            <p className="text-xs text-gray-400 mt-4 flex items-center justify-center gap-1.5">
-              <FiCalendar className="w-3.5 h-3.5" />
-              Member since {new Date(data.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </p>
-          )}
         </div>
 
-        {/* Account Info */}
-        <div className="bg-white rounded-xl border border-[#EDEDF0] p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-4">Account Information</h2>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiUser className="w-4 h-4 text-gray-500" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 animate-slide-up">
+            <h2 className="text-sm font-semibold text-gray-900 mb-4">Account Information</h2>
+            <div className="space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                  <FiUser className="w-4 h-4 text-indigo-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider">Name</p>
+                  <p className="text-sm font-medium text-gray-900 truncate">{data?.name ?? '-'}</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Name</p>
-                <p className="text-sm font-medium text-gray-900 truncate">{data?.name ?? '-'}</p>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <FiMail className="w-4 h-4 text-blue-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider">Email</p>
+                  <p className="text-sm font-medium text-gray-900 truncate break-all">{data?.email ?? '-'}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+                  <FiShield className="w-4 h-4 text-violet-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider">Role</p>
+                  <p className="text-sm font-medium text-gray-900 capitalize">{data?.role ?? '-'}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
+                  <FiCalendar className="w-4 h-4 text-amber-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] text-gray-400 uppercase tracking-wider">Member Since</p>
+                  <p className="text-sm font-medium text-gray-900">
+                    {data?.createdAt ? new Date(data.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiMail className="w-4 h-4 text-gray-500" />
+          </div>
+
+          <div className="bg-white rounded-xl border border-gray-200 p-5 animate-slide-up" style={{ animationDelay: '100ms' }}>
+            <h2 className="text-sm font-semibold text-gray-900 mb-4">Activity</h2>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                    <FiLayers className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Tasks Created</p>
+                    <p className="text-xs text-gray-500">Total tasks you've created</p>
+                  </div>
+                </div>
+                <span className="text-lg font-bold text-gray-900 tabular-nums">—</span>
               </div>
-              <div className="min-w-0">
-                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Email</p>
-                <p className="text-sm font-medium text-gray-900 truncate">{data?.email ?? '-'}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiShield className="w-4 h-4 text-gray-500" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Role</p>
-                <p className="text-sm font-medium text-gray-900 capitalize">{data?.role ?? '-'}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                <FiCalendar className="w-4 h-4 text-gray-500" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[10px] text-gray-400 uppercase tracking-wider">Member Since</p>
-                <p className="text-sm font-medium text-gray-900">
-                  {data?.createdAt ? new Date(data.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-'}
-                </p>
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+                    <FiCheckCircle className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Tasks Completed</p>
+                    <p className="text-xs text-gray-500">Tasks marked as done</p>
+                  </div>
+                </div>
+                <span className="text-lg font-bold text-gray-900 tabular-nums">—</span>
               </div>
             </div>
           </div>

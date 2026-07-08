@@ -19,7 +19,7 @@ export default function Select({
         className={`w-full px-3 py-2 rounded-lg border text-sm outline-none transition-all duration-150 bg-white text-gray-900 ${
           error
             ? 'border-red-300 focus:ring-2 focus:ring-red-500/20 focus:border-red-400'
-            : 'border-[#EDEDF0] focus:ring-2 focus:ring-[#6C5CE7]/20 focus:border-[#6C5CE7]'
+            : 'border-gray-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500'
         } ${className}`}
       >
         {options.map((opt) => (

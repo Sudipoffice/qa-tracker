@@ -10,18 +10,36 @@ import Input from '../components/ui/Input'
 import Select from '../components/ui/Select'
 import SlideOver from '../components/ui/SlideOver'
 import ConfirmDialog from '../components/ui/ConfirmDialog'
+import StatusBadge from '../components/ui/StatusBadge'
+import PriorityBadge from '../components/ui/PriorityBadge'
+import Avatar from '../components/ui/Avatar'
+import EmptyState from '../components/ui/EmptyState'
 import {
   FiPlus, FiEdit2, FiTrash2, FiChevronLeft, FiGrid, FiList,
-  FiCalendar, FiMessageSquare, FiPaperclip, FiUser, FiClock
+  FiCalendar, FiUser, FiClock, FiCheckCircle
 } from 'react-icons/fi'
 
 const statuses = ['Todo', 'In Progress', 'QA', 'Done']
 
-const statusConfig = {
-  'Todo': { color: 'text-[#F97316]', bg: 'bg-orange-50', dot: 'bg-[#F97316]', border: 'border-orange-200' },
-  'In Progress': { color: 'text-[#B45309]', bg: 'bg-amber-50', dot: 'bg-[#F59E0B]', border: 'border-amber-200' },
-  'QA': { color: 'text-[#6C5CE7]', bg: 'bg-purple-50', dot: 'bg-[#6C5CE7]', border: 'border-purple-200' },
-  'Done': { color: 'text-[#22C55E]', bg: 'bg-emerald-50', dot: 'bg-[#22C55E]', border: 'border-emerald-200' },
+const statusDot = {
+  'Todo': 'bg-slate-500',
+  'In Progress': 'bg-blue-500',
+  'QA': 'bg-violet-500',
+  'Done': 'bg-emerald-500',
+}
+
+const statusText = {
+  'Todo': 'text-slate-700',
+  'In Progress': 'text-blue-700',
+  'QA': 'text-violet-700',
+  'Done': 'text-emerald-700',
+}
+
+const statusBg = {
+  'Todo': 'bg-slate-50',
+  'In Progress': 'bg-blue-50',
+  'QA': 'bg-violet-50',
+  'Done': 'bg-emerald-50',
 }
 
 const priorityOptions = [
@@ -38,24 +56,12 @@ const statusOptions = [
   { value: 'Done', label: 'Done' },
 ]
 
-const priorityColors = {
-  Low: 'bg-gray-100 text-gray-600',
-  Medium: 'bg-amber-50 text-[#D97706]',
-  High: 'bg-orange-50 text-[#EA580C]',
-  Critical: 'bg-red-50 text-[#DC2626]',
-}
-
 const initialTaskForm = { title: '', description: '', priority: 'Medium', status: 'Todo' }
 
 function formatDate(dateStr) {
   if (!dateStr) return ''
   const d = new Date(dateStr)
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-function getInitials(name) {
-  if (!name) return '?'
-  return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
 }
 
 function TaskCard({ task, onEdit, onDelete }) {
@@ -76,16 +82,16 @@ function TaskCard({ task, onEdit, onDelete }) {
       draggable
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      className={`bg-white rounded-lg border border-[#EDEDF0] p-3.5 cursor-grab active:cursor-grabbing transition-all duration-150 hover:border-gray-200 hover:shadow-sm group ${
+      className={`bg-white rounded-lg border border-gray-200 p-3 cursor-grab active:cursor-grabbing transition-all duration-150 hover:border-gray-300 hover:shadow-sm group ${
         dragging ? 'opacity-50 shadow-md' : ''
       }`}
     >
-      <div className="flex items-start justify-between gap-2 mb-2.5">
+      <div className="flex items-start justify-between gap-2 mb-2">
         <h4 className="text-sm font-medium text-gray-900 leading-snug line-clamp-2">{task.title}</h4>
         <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
             onClick={(e) => { e.stopPropagation(); onEdit(task) }}
-            className="p-1 rounded text-gray-400 hover:text-[#6C5CE7] hover:bg-[#F3EEFF] transition-colors"
+            className="p-1 rounded text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
           >
             <FiEdit2 className="w-3 h-3" />
           </button>
@@ -98,24 +104,18 @@ function TaskCard({ task, onEdit, onDelete }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5 mb-2.5 flex-wrap">
-        <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${priorityColors[task.priority] || 'bg-gray-100 text-gray-600'}`}>
-          {task.priority}
-        </span>
+      <div className="mb-2.5">
+        <PriorityBadge priority={task.priority} />
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          {task.assignedTo ? (
-            <div className="flex items-center justify-center w-5 h-5 rounded-full bg-[#6C5CE7] text-white text-[8px] font-semibold ring-1 ring-white">
-              {getInitials(task.assignedTo.name || '')}
-            </div>
-          ) : (
-            <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center">
-              <FiUser className="w-2.5 h-2.5 text-gray-400" />
-            </div>
-          )}
-        </div>
+        {task.assignedTo ? (
+          <Avatar name={task.assignedTo.name} size="sm" />
+        ) : (
+          <div className="w-5 h-5 rounded-full bg-gray-200 flex items-center justify-center">
+            <FiUser className="w-2.5 h-2.5 text-gray-400" />
+          </div>
+        )}
         <div className="flex items-center gap-2 text-[10px] text-gray-400">
           {task.createdAt && (
             <span className="flex items-center gap-1">
@@ -130,7 +130,6 @@ function TaskCard({ task, onEdit, onDelete }) {
 }
 
 function DropColumn({ status, tasks, onEdit, onDelete, onDrop }) {
-  const config = statusConfig[status]
   const [dragOver, setDragOver] = useState(false)
 
   const handleDragOver = (e) => {
@@ -157,20 +156,20 @@ function DropColumn({ status, tasks, onEdit, onDelete, onDrop }) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className={`bg-gray-50/50 rounded-xl border transition-all duration-150 ${
-        dragOver ? 'border-[#6C5CE7] bg-[#6C5CE7]/5' : 'border-[#EDEDF0]'
+      className={`rounded-xl border transition-all duration-150 ${
+        dragOver ? 'border-indigo-500 bg-indigo-50' : 'border-gray-200'
       }`}
     >
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className={`flex items-center justify-between px-4 py-3 rounded-t-xl border-b border-gray-200 ${statusBg[status]}`}>
         <div className="flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${config.dot}`} />
-          <span className={`text-sm font-semibold ${config.color}`}>{status}</span>
+          <span className={`w-2 h-2 rounded-full ${statusDot[status]}`} />
+          <span className={`text-sm font-semibold ${statusText[status]}`}>{status}</span>
         </div>
-        <span className="text-xs font-medium text-gray-400 bg-gray-100 px-2 py-0.5 rounded-md">
+        <span className="text-xs font-medium text-gray-500 bg-white/80 px-2 py-0.5 rounded-md">
           {tasks.length}
         </span>
       </div>
-      <div className="px-3 pb-3 space-y-2.5 min-h-[120px]">
+      <div className={`px-3 pb-3 pt-3 space-y-2.5 min-h-[120px] ${statusBg[status]}`}>
         {tasks.map(task => (
           <TaskCard
             key={task._id || task.id}
@@ -192,20 +191,14 @@ function DropColumn({ status, tasks, onEdit, onDelete, onDrop }) {
 function TaskDetailPanel({ task, onClose, onEdit, onDelete }) {
   if (!task) return null
 
-  const config = statusConfig[task.status]
-
   return (
     <SlideOver isOpen={!!task} onClose={onClose} title="Task Details">
       <div className="space-y-5">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">{task.title}</h3>
           <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${config.bg} ${config.color}`}>
-              {task.status}
-            </span>
-            <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${priorityColors[task.priority] || 'bg-gray-100 text-gray-600'}`}>
-              {task.priority}
-            </span>
+            <StatusBadge status={task.status} />
+            <PriorityBadge priority={task.priority} />
           </div>
         </div>
 
@@ -246,20 +239,6 @@ function TaskDetailPanel({ task, onClose, onEdit, onDelete }) {
                 <p className="text-sm font-medium text-gray-900">{formatDate(task.updatedAt) || '-'}</p>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div>
-          <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Activity</h4>
-          <div className="flex items-center gap-3 text-sm text-gray-400">
-            <span className="flex items-center gap-1.5">
-              <FiMessageSquare className="w-4 h-4" />
-              0 comments
-            </span>
-            <span className="flex items-center gap-1.5">
-              <FiPaperclip className="w-4 h-4" />
-              0 attachments
-            </span>
           </div>
         </div>
 
@@ -406,7 +385,7 @@ export default function ProjectDetails() {
       <MainLayout>
         <div className="space-y-5">
           <div className="skeleton" style={{ width: 160, height: 20 }} />
-          <div className="bg-white rounded-xl border border-[#EDEDF0] p-5 space-y-3">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-3">
             <div className="skeleton" style={{ width: '60%', height: 24 }} />
             <div className="skeleton" style={{ width: '40%', height: 14 }} />
             <div className="flex gap-6 pt-2">
@@ -417,7 +396,7 @@ export default function ProjectDetails() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-white rounded-xl border border-[#EDEDF0] p-4 space-y-3">
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
                 <div className="skeleton" style={{ width: 80, height: 20 }} />
                 {Array.from({ length: 2 }).map((_, j) => (
                   <div key={j} className="skeleton" style={{ width: '100%', height: 80 }} />
@@ -443,7 +422,6 @@ export default function ProjectDetails() {
 
   return (
     <MainLayout>
-      {/* Back link */}
       <Link
         to="/projects"
         className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors mb-5"
@@ -452,25 +430,19 @@ export default function ProjectDetails() {
         Back to Projects
       </Link>
 
-      {/* Project header */}
-      <div className="bg-white rounded-xl border border-[#EDEDF0] p-5 mb-5 animate-fade-in">
+      <div className="bg-white rounded-xl border border-gray-200 p-5 mb-5 animate-fade-in">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-2.5 mb-2">
               <h1 className="text-lg font-bold text-gray-900">{project.name}</h1>
-              <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${
-                project.status === 'active' ? 'bg-emerald-50 text-[#22C55E]' :
-                project.status === 'completed' ? 'bg-blue-50 text-[#3B82F6]' :
-                'bg-amber-50 text-[#D97706]'
-              }`}>
-                {project.status}
-              </span>
+              <StatusBadge status={project.status === 'active' ? 'In Progress' : project.status === 'completed' ? 'Done' : project.status === 'on hold' ? 'Todo' : project.status} />
             </div>
             <p className="text-sm text-gray-500 mb-3">{project.description || 'No description'}</p>
             <div className="flex items-center gap-2 text-xs text-gray-400">
-              {project.creator?.name && (
+              {project.createdBy?.name && (
                 <>
-                  <span className="text-gray-500">{project.creator.name}</span>
+                  <Avatar name={project.createdBy.name} size="sm" />
+                  <span className="text-gray-500">{project.createdBy.name}</span>
                   <span>·</span>
                 </>
               )}
@@ -479,7 +451,7 @@ export default function ProjectDetails() {
           </div>
         </div>
 
-        <div className="flex items-center gap-5 pt-4 mt-4 border-t border-[#EDEDF0]">
+        <div className="flex items-center gap-6 pt-4 mt-4 border-t border-gray-200">
           {[
             { label: 'Total', value: stats.total },
             { label: 'Todo', value: stats.todo },
@@ -488,14 +460,13 @@ export default function ProjectDetails() {
             { label: 'Done', value: stats.done },
           ].map(stat => (
             <div key={stat.label} className="text-center">
-              <div className="text-lg font-bold text-gray-900">{stat.value}</div>
+              <div className="text-xl font-bold text-gray-900 tabular-nums">{stat.value}</div>
               <div className="text-[10px] text-gray-400 uppercase tracking-wider mt-0.5">{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Toolbar */}
       <div className="flex items-center justify-between mb-5">
         <Button onClick={openCreate} size="sm">
           <FiPlus className="w-3.5 h-3.5" />
@@ -523,19 +494,13 @@ export default function ProjectDetails() {
         </div>
       </div>
 
-      {/* Content */}
       {tasks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-[#EDEDF0]">
-          <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-4">
-            <FiGrid className="w-6 h-6 text-gray-400" />
-          </div>
-          <h3 className="text-sm font-semibold text-gray-900 mb-1">No tasks yet</h3>
-          <p className="text-sm text-gray-500 mb-5">Add your first task to get started.</p>
-          <Button onClick={openCreate}>
-            <FiPlus className="w-4 h-4" />
-            Add Task
-          </Button>
-        </div>
+        <EmptyState
+          icon={FiCheckCircle}
+          title="No tasks yet"
+          description="Add your first task to get started."
+          action={<Button onClick={openCreate}><FiPlus className="w-4 h-4" />Add Task</Button>}
+        />
       ) : view === 'kanban' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {statuses.map((status, idx) => {
@@ -554,7 +519,7 @@ export default function ProjectDetails() {
           })}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-[#EDEDF0] overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full">
             <thead>
               <tr className="bg-gray-50">
@@ -567,52 +532,53 @@ export default function ProjectDetails() {
               </tr>
             </thead>
             <tbody>
-              {tasks.map(task => {
-                const config = statusConfig[task.status]
-                return (
-                  <tr
-                    key={task._id || task.id}
-                    className="hover:bg-gray-50 transition-colors border-b border-[#EDEDF0] last:border-0 cursor-pointer"
-                    onClick={() => setSelectedTask(task)}
-                  >
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">{task.title}</td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${config.bg} ${config.color}`}>
-                        {task.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${priorityColors[task.priority] || 'bg-gray-100 text-gray-600'}`}>
-                        {task.priority}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-500">{task.assignedTo?.name || '—'}</td>
-                    <td className="px-4 py-3 text-sm text-gray-400">{formatDate(task.createdAt)}</td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-1">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); openEdit(task) }}
-                          className="p-1.5 rounded-md text-gray-400 hover:text-[#6C5CE7] hover:bg-[#F3EEFF] transition-colors"
-                        >
-                          <FiEdit2 className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); confirmDelete(task) }}
-                          className="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
-                        >
-                          <FiTrash2 className="w-3.5 h-3.5" />
-                        </button>
+              {tasks.map(task => (
+                <tr
+                  key={task._id || task.id}
+                  className="hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 cursor-pointer"
+                  onClick={() => setSelectedTask(task)}
+                >
+                  <td className="px-4 py-3 text-sm font-medium text-gray-900">{task.title}</td>
+                  <td className="px-4 py-3">
+                    <StatusBadge status={task.status} />
+                  </td>
+                  <td className="px-4 py-3">
+                    <PriorityBadge priority={task.priority} />
+                  </td>
+                  <td className="px-4 py-3">
+                    {task.assignedTo ? (
+                      <div className="flex items-center gap-2">
+                        <Avatar name={task.assignedTo.name} size="sm" />
+                        <span className="text-sm text-gray-500">{task.assignedTo.name}</span>
                       </div>
-                    </td>
-                  </tr>
-                )
-              })}
+                    ) : (
+                      <span className="text-sm text-gray-400">—</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-gray-400">{formatDate(task.createdAt)}</td>
+                  <td className="px-4 py-3 text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); openEdit(task) }}
+                        className="p-1.5 rounded-md text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
+                      >
+                        <FiEdit2 className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); confirmDelete(task) }}
+                        className="p-1.5 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                      >
+                        <FiTrash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       )}
 
-      {/* Create/Edit Modal */}
       <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={editingTask ? 'Edit Task' : 'Create Task'} size="md">
         <div className="space-y-4">
           <Input
@@ -649,7 +615,6 @@ export default function ProjectDetails() {
         </div>
       </Modal>
 
-      {/* Task Detail Panel */}
       <TaskDetailPanel
         task={selectedTask}
         onClose={() => setSelectedTask(null)}
@@ -657,7 +622,6 @@ export default function ProjectDetails() {
         onDelete={confirmDelete}
       />
 
-      {/* Delete Confirmation */}
       <ConfirmDialog
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}

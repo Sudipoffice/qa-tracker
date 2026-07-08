@@ -26,9 +26,9 @@ export default function SlideOver({ isOpen, onClose, title, children }) {
 
   return createPortal(
     <div className="fixed inset-0 z-50">
-      <div className="fixed inset-0 bg-black/30" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/40" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 w-full max-w-lg bg-white shadow-xl animate-slide-in-right flex flex-col">
-        <div className="flex items-center justify-between px-5 h-14 border-b border-[#EDEDF0] shrink-0">
+        <div className="flex items-center justify-between px-5 h-14 border-b border-gray-200 shrink-0">
           <h2 className="text-sm font-semibold text-gray-900">{title}</h2>
           <button
             onClick={onClose}
